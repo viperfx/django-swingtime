@@ -7,9 +7,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from booking.models import Partner
 from django.conf import settings
-
 from dateutil import rrule
-
+import os
 __all__ = (
     'Note',
     'EventType',
