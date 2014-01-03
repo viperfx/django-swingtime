@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db import models
 from django.contrib.auth.models import User
+from booking.models import Partner
 from django.conf import settings
 
 from dateutil import rrule
@@ -49,7 +50,8 @@ class EventType(models.Model):
     '''
     abbr = models.CharField(_(u'abbreviation'), max_length=4, unique=True)
     label = models.CharField(_('label'), max_length=50)
-
+    # events linked to a partner
+    partner = models.ForeignKey(Partner, blank=True, null=True, related_name='partner')
     #===========================================================================
     class Meta:
         verbose_name = _('event type')
@@ -65,11 +67,24 @@ class Event(models.Model):
     '''
     Container model for general metadata and associated ``Occurrence`` entries.
     '''
+    MUSIC_CHOICES = (
+        (0, 'House'),
+        (1, 'Rap')
+    )
     title = models.CharField(_('title'), max_length=32)
     description = models.CharField(_('description'), max_length=100)
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
-
+    # music genre
+    genre = models.IntegerField(choices=MUSIC_CHOICES)
+    # events linked to a partner
+    partner = models.ForeignKey(Partner, blank=True, null=True, related_name="event_partner")
+    book_table = models.BooleanField()
+    book_guestlist = models.BooleanField()
+    small_bg = models.ImageField(upload_to=os.path.join('images', 'partner_events', 'bg'),
+                                 default=os.path.join('images', 'default_event.gif'))
+    banner = models.ImageField(upload_to=os.path.join('images', 'partner_events', 'banner'),
+                               default=os.path.join('images', 'default_event.gif'))
     #===========================================================================
     class Meta:
         verbose_name = _('event')
