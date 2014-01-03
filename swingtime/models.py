@@ -72,7 +72,6 @@ class Event(models.Model):
     )
     title = models.CharField(_('title'), max_length=32)
     description = models.CharField(_('description'), max_length=100)
-    event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
     # music genre
     genre = models.IntegerField(choices=MUSIC_CHOICES)
