@@ -71,7 +71,7 @@ def event_view(
     event_form = recurrence_form = None
     if request.method == 'POST':
         if '_update' in request.POST:
-            event_form = event_form_class(request.POST, instance=event)
+            event_form = event_form_class(request.POST, request.FILES, instance=event)
             if event_form.is_valid():
                 event_form.save(event)
                 return http.HttpResponseRedirect(request.path)
@@ -147,7 +147,7 @@ def add_event(
     '''
     dtstart = None
     if request.method == 'POST':
-        event_form = event_form_class(request.POST)
+        event_form = event_form_class(request.POST,request.FILES)
         recurrence_form = recurrence_form_class(request.POST)
         if event_form.is_valid() and recurrence_form.is_valid():
             event = event_form.save()
